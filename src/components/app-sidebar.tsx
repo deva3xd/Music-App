@@ -35,7 +35,7 @@ export function AppSidebar() {
                   <Image src={Photo1} alt="thumbnail" className="h-12 w-12 rounded-xs" />
                   <div className="flex flex-col justify-center ms-2">
                     <span className="font-semibold text-base">Mood</span>
-                    <span className="font-normal text-xs text-gray-200">Create in 2025</span>
+                    <span className="font-normal text-xs text-gray-200">Created in 2025</span>
                   </div>
                 </div>
               </SidebarMenuItem>
@@ -44,7 +44,7 @@ export function AppSidebar() {
                   <Image src={Photo2} alt="thumbnail" className="h-12 w-12 rounded-xs" />
                   <div className="flex flex-col justify-center ms-2">
                     <span className="font-semibold text-base">Chill</span>
-                    <span className="font-normal text-xs text-gray-200">Create in 2025</span>
+                    <span className="font-normal text-xs text-gray-200">Created in 2025</span>
                   </div>
                 </div>
               </SidebarMenuItem>
@@ -53,7 +53,7 @@ export function AppSidebar() {
                   <Image src={Photo3} alt="thumbnail" className="h-12 w-12 rounded-xs" />
                   <div className="flex flex-col justify-center ms-2">
                     <span className="font-semibold text-base text-green-500">Mix</span>
-                    <span className="font-normal text-xs text-gray-200">Create in 2025</span>
+                    <span className="font-normal text-xs text-gray-200">Created in 2025</span>
                   </div>
                 </div>
               </SidebarMenuItem>
@@ -64,7 +64,7 @@ export function AppSidebar() {
       <SidebarFooter className="bg-foreground text-white p-4">
         <Link
           href="/song"
-          className="hover:opacity-75 flex flex-row items-center"
+          className="hover:opacity-85 flex flex-row items-center"
         >
           <Plus size={20} />
           Add Song

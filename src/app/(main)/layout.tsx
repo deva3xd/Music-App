@@ -2,8 +2,8 @@ import "../globals.css";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Spotify - Dashboard",
-  description: "Spotify ",
+  title: "Beatwave - Dashboard",
+  description: "Beatwave ",
 };
 
 export default function RootLayout({
