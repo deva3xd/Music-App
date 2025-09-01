@@ -11,7 +11,10 @@ import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { UploadButton } from "@/utils/uploadthing";
+import { generateReactHelpers } from "@uploadthing/react";
+import type { OurFileRouter } from "@/app/api/uploadthing/core";
+
+const { useUploadThing } = generateReactHelpers<OurFileRouter>();
 
 export default function Home() {
   const [title, setTitle] = useState("");
@@ -35,7 +38,7 @@ export default function Home() {
 
     await fetch("/api", {
       method: "POST",
-      body: formData,  
+      body: formData,
     })
       .then((res) => {
         console.log(res);
@@ -44,9 +47,22 @@ export default function Home() {
         console.log(e);
       });
 
+    if (!audio) {
+      return console.log("error");
+    }
+    startUpload([audio]);
     setLoading(false);
     router.push("/");
   };
+
+  const { startUpload } = useUploadThing("fileUploader", {
+    onClientUploadComplete: (res) => {
+      console.log("Files:", res);
+    },
+    onUploadError: (error) => {
+      console.log(error);
+    },
+  });
 
   return (
     <div className="flex flex-row justify-center items-center h-screen">
@@ -136,18 +152,6 @@ export default function Home() {
             </button>
           </CardFooter>
         </form>
-        <UploadButton
-          endpoint="imageUploader"
-          onClientUploadComplete={(res) => {
-            // Do something with the response
-            console.log("Files: ", res);
-            alert("Upload Completed");
-          }}
-          onUploadError={(error: Error) => {
-            // Do something with the error.
-            alert(`ERROR! ${error.message}`);
-          }}
-        />
         <div className="flex justify-between items-center px-6">
           <span className="text-green-500 -rotate-6">BEATWAVE</span>
           <div className="flex flex-row items-center">

@@ -10,7 +10,7 @@ export const GET = async () => {
 
 export const POST = async (req: NextRequest) => {
   try {
-    // Ambil form data dari request
+    // Get data
     const formData = await req.formData();
     const title = formData.get("title") as string;
     const artist = formData.get("artist") as string;
@@ -18,49 +18,32 @@ export const POST = async (req: NextRequest) => {
     const audio = formData.get("audio") as File;
     
     let thumbnailUrl: string | null = null;
-    let audioUrl: string;
 
     // Upload thumbnail 
-    if (thumbnail) {
-      const uploadRes = await fetch("https://uploadthing.com/api/upload", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${process.env.UPLOADTHING_TOKEN}`,
-        },
-        body: (() => {
-          const fd = new FormData();
-          fd.append("files", thumbnail);
-          return fd;
-        })(),
-      });
-      const data = await uploadRes.json();
-      thumbnailUrl = data[0]?.url || null;
-    }
-
-    // Upload audio
-    const uploadRes = await fetch("https://uploadthing.com/api/upload", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${process.env.UPLOADTHING_TOKEN}`,
-      },
-      body: (() => {
-        const fd = new FormData();
-        fd.append("files", audio);
-        return fd;
-      })(),
-    });
-    const data = await uploadRes.json();
-    audioUrl = data[0]?.url || null;
+    // if (thumbnail) {
+    //   const uploadRes = await fetch("https://uploadthing.com/api/upload", {
+    //     method: "POST",
+    //     headers: {
+    //       Authorization: `Bearer ${process.env.UPLOADTHING_TOKEN}`,
+    //     },
+    //     body: (() => {
+    //       const fd = new FormData();
+    //       fd.append("files", thumbnail);
+    //       return fd;
+    //     })(),
+    //   });
+    //   const data = await uploadRes.json();
+    //   thumbnailUrl = data[0]?.url || null;
+    // }
 
     const song = await prisma.song.create({
       data: {
         title,
         artist,
         thumbnail: thumbnailUrl, 
-        audio: audioUrl, 
+        audio: audio.name, 
       },
     });
-
     return NextResponse.json({ song });
   } catch (err) {
     console.error(err);
