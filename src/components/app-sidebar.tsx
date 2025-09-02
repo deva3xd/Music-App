@@ -8,12 +8,12 @@ import {
   SidebarMenuItem,
   SidebarFooter,
 } from "@/components/ui/sidebar";
+import Image from "next/image";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import Photo1 from "@/images/1.jpg";
 import Photo2 from "@/images/2.jpg";
 import Photo3 from "@/images/3.jpg";
-import Image from "next/image";
 
 export function AppSidebar() {
   return (
@@ -32,7 +32,7 @@ export function AppSidebar() {
               </SidebarMenuItem>
               <SidebarMenuItem className="mb-2">
                 <div className="flex flex-row">
-                  <Image src={Photo1} alt="thumbnail" className="h-12 w-12 rounded-xs" />
+                  <Image src={Photo1} alt="thumbnail" className="h-12 w-12 rounded-xs" priority />
                   <div className="flex flex-col justify-center ms-2">
                     <span className="font-semibold text-base">Mood</span>
                     <span className="font-normal text-xs text-gray-200">Created in 2025</span>
@@ -41,7 +41,7 @@ export function AppSidebar() {
               </SidebarMenuItem>
               <SidebarMenuItem className="mb-2">
                 <div className="flex flex-row">
-                  <Image src={Photo2} alt="thumbnail" className="h-12 w-12 rounded-xs" />
+                  <Image src={Photo2} alt="thumbnail" className="h-12 w-12 rounded-xs" priority />
                   <div className="flex flex-col justify-center ms-2">
                     <span className="font-semibold text-base">Chill</span>
                     <span className="font-normal text-xs text-gray-200">Created in 2025</span>
@@ -50,7 +50,7 @@ export function AppSidebar() {
               </SidebarMenuItem>
               <SidebarMenuItem className="mb-2">
                 <div className="flex flex-row">
-                  <Image src={Photo3} alt="thumbnail" className="h-12 w-12 rounded-xs" />
+                  <Image src={Photo3} alt="thumbnail" className="h-12 w-12 rounded-xs" priority />
                   <div className="flex flex-col justify-center ms-2">
                     <span className="font-semibold text-base text-green-500">Mix</span>
                     <span className="font-normal text-xs text-gray-200">Created in 2025</span>
