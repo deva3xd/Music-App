@@ -7,8 +7,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { generateReactHelpers } from "@uploadthing/react";
@@ -16,7 +16,7 @@ import type { OurFileRouter } from "@/app/api/uploadthing/core";
 
 const { useUploadThing } = generateReactHelpers<OurFileRouter>();
 
-export default function Home() {
+const Song = () => {
   const [title, setTitle] = useState("");
   const [artist, setArtist] = useState("");
   const [thumbnail, setThumbnail] = useState<File | null>(null);
@@ -43,8 +43,8 @@ export default function Home() {
       .then((res) => {
         console.log(res);
       })
-      .catch((e) => {
-        console.log(e);
+      .catch((err) => {
+        console.log(err);
       });
 
     if (!audio) {
@@ -60,7 +60,7 @@ export default function Home() {
       console.log("Files:", res);
     },
     onUploadError: (error) => {
-      console.log(error);
+      console.log("Error: ", error);
     },
   });
 
@@ -145,7 +145,7 @@ export default function Home() {
           <CardFooter>
             <button
               type="submit"
-              className="bg-black w-full rounded-sm cursor-pointer px-3 py-2 hover:opacity-85"
+              className="bg-black w-full rounded-sm cursor-pointer px-3 py-2 hover:opacity-85 disabled:cursor-default disabled:opacity-50"
               disabled={loading}
             >
               {loading ? "Saving..." : "Submit"}
@@ -165,3 +165,5 @@ export default function Home() {
     </div>
   );
 }
+
+export default Song;
