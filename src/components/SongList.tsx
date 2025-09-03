@@ -1,16 +1,20 @@
 import Image from "next/image";
-import React, { useState, useRef, Dispatch, SetStateAction, useEffect } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { Pause, Play } from "lucide-react";
 import { song } from "@/generated/prisma";
 import Ph from "@/images/placeholder.png";
 
 type headerProps = {
   songs: song[];
-  selectSong: Dispatch<SetStateAction<song | null>>;
-  isPlaying: any;
+  isPlaying: boolean;
+  songState: {
+    value: song | null;
+    set: Dispatch<SetStateAction<song | null>>;
+  },
+  handleClick: (song: song) => void;
 }
 
-const SongList = ({ songs, selectSong, isPlaying }: headerProps) => {
+const SongList = ({ songs, songState, isPlaying, handleClick }: headerProps) => {
   return (
     <div className="grid grid-cols-6">
       {songs.map((song) => {
@@ -20,7 +24,7 @@ const SongList = ({ songs, selectSong, isPlaying }: headerProps) => {
               <Image
                 src={Ph}
                 alt="thumbnail"
-                className="rounded-xs"
+                className="rounded-t-xs"
                 priority
               />
               <div className="flex flex-row justify-between items-end">
@@ -28,8 +32,12 @@ const SongList = ({ songs, selectSong, isPlaying }: headerProps) => {
                   <span className="font-normal text-sm line-clamp-1" title={song.title}>{song.title}</span>
                   <span className="font-light text-xs line-clamp-1">{song.artist}</span>
                 </div>
-                <button onClick={() => selectSong(song)} className="bg-green-500 rounded-full p-1 cursor-pointer text-black">
-                  {isPlaying ? <Pause size={14} fill="true" /> : <Play size={14} fill="true" />}
+                <button onClick={() => handleClick(song)} className="bg-green-500 rounded-full p-1 cursor-pointer text-black">
+                  {songState.value?.id === song.id && isPlaying ? (
+                    <Pause size={14} fill="true" />
+                  ) : (
+                    <Play size={14} fill="true" />
+                  )}
                 </button>
               </div>
             </div>

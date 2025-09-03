@@ -1,8 +1,19 @@
 import Image from "next/image";
 import { Pause, Play, SkipBack, SkipForward, Volume1Icon } from "lucide-react";
+import { formatTime } from "@/utils/formatTime";
 import Ph from "@/images/placeholder.png";
+import { song } from "@/generated/prisma";
 
-const Player = ({ selectSong, handleAudio, isPlaying }: any) => {
+type headerProps = {
+  selectSong: song | null;
+  handleAudio: () => void;
+  isPlaying: boolean;
+  duration: number;
+  currentTime: number;
+  handleSeek: (value: number) => void;
+}
+
+const Player = ({ selectSong, handleAudio, isPlaying, duration, currentTime, handleSeek }: headerProps) => {
   if (!selectSong) return null;
 
   return (
@@ -23,9 +34,9 @@ const Player = ({ selectSong, handleAudio, isPlaying }: any) => {
           <SkipForward fill="true" className="p-1 rounded-full" size={30} />
         </div>
         <div className="flex flex-row items-center gap-3">
-          <span className="text-xs">1.00</span>
-          <input type="range" className="w-full accent-white" />
-          <span className="text-xs">3.07</span>
+          <span className="text-xs">{formatTime(currentTime)}</span>
+          <input type="range" className="w-full accent-white" min={0} max={duration} value={currentTime} onChange={(e) => handleSeek(Number(e.target.value))} />
+          <span className="text-xs">{formatTime(duration)}</span>
         </div>
       </div>
       <div className="flex flex-row items-center justify-end px-5 gap-3">
