@@ -53,7 +53,7 @@ const Home = () => {
     };
   }, [selectSong]);
 
-  // progress
+  // progress bar
   const handleSeek = (value: number) => {
     if (audioRef.current) {
       audioRef.current.currentTime = value;
@@ -102,7 +102,7 @@ const Home = () => {
           <Player selectSong={selectSong} handleAudio={handleAudio} isPlaying={isPlaying} duration={duration} currentTime={currentTime} handleSeek={handleSeek} />
         </div>
       </div>
-      <audio ref={audioRef} src="https://tqoqayi8vh.ufs.sh/f/byHVJUMzAjzLUmmiU72A5KhTaCJmvFE71UVSQHswNPWefd4n" />
+      <audio ref={audioRef} src={selectSong?.audio} />
     </div>
   );
 };
