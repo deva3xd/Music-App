@@ -9,47 +9,35 @@ export const GET = async () => {
 };
 
 export const POST = async (req: NextRequest) => {
-  try {
-    // Get data
-    const formData = await req.formData();
-    const title = formData.get("title") as string;
-    const artist = formData.get("artist") as string;
-    const thumbnail = formData.get("thumbnail") as File | null;
-    const audio = formData.get("audio") as File;
-    
-    let thumbnailUrl: string | null = null;
+  const { title, artist, audio } = await req.json();
 
-    // Upload thumbnail 
-    // if (thumbnail) {
-    //   const uploadRes = await fetch("https://uploadthing.com/api/upload", {
-    //     method: "POST",
-    //     headers: {
-    //       Authorization: `Bearer ${process.env.UPLOADTHING_TOKEN}`,
-    //     },
-    //     body: (() => {
-    //       const fd = new FormData();
-    //       fd.append("files", thumbnail);
-    //       return fd;
-    //     })(),
-    //   });
-    //   const data = await uploadRes.json();
-    //   thumbnailUrl = data[0]?.url || null;
-    // }
+  const song = await prisma.song.create({
+    data: {
+      title,
+      artist,
+      audio, 
+    },
+  });
 
-    const song = await prisma.song.create({
-      data: {
-        title,
-        artist,
-        thumbnail: thumbnailUrl, 
-        audio: audio.name, 
-      },
-    });
-    return NextResponse.json({ song });
-  } catch (err) {
-    console.error(err);
-    return NextResponse.json({ error: "Upload failed" }, { status: 500 });
-  }
+  return NextResponse.json({ song });
 };
+
+// Upload thumbnail 
+// if (thumbnail) {
+//   const uploadRes = await fetch("https://uploadthing.com/api/upload", {
+//     method: "POST",
+//     headers: {
+//       Authorization: `Bearer ${process.env.UPLOADTHING_TOKEN}`,
+//     },
+//     body: (() => {
+//       const fd = new FormData();
+//       fd.append("files", thumbnail);
+//       return fd;
+//     })(),
+//   });
+//   const data = await uploadRes.json();
+//   thumbnailUrl = data[0]?.url || null;
+// }
 
 // // Action to delete
 // export const DELETE = async (req: NextRequest) => {

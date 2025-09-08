@@ -24,33 +24,27 @@ const Song = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    // Create FormData
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("artist", artist);
+    if (!audio) return;
 
-    if (thumbnail) formData.append("thumbnail", thumbnail);
-    if (audio) formData.append("audio", audio);
+    // upload file to uploadthing
+    const uploaded = await startUpload([audio]);
+    const audioUrl = uploaded?.[0]?.ufsUrl;
+
+    if (!audioUrl) return;
 
     await fetch("/api", {
       method: "POST",
-      body: formData,
-    })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-    if (!audio) {
-      return console.log("error");
-    }
-    startUpload([audio]);
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title,
+        artist,
+        audio: audioUrl,
+      }),
+    });
     setLoading(false);
     router.push("/");
   };
