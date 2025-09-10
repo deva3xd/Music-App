@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Pause, Play, SkipBack, SkipForward, Volume1Icon } from "lucide-react";
+import { Pause, Play, SkipBack, SkipForward, VolumeX, Volume, Volume1, Volume2 } from "lucide-react";
 import { formatTime } from "@/utils/formatTime";
 import Ph from "@/images/placeholder.png";
 import { song } from "@/generated/prisma";
@@ -11,10 +11,19 @@ type headerProps = {
   duration: number;
   currentTime: number;
   handleSeek: (value: number) => void;
+  handleVolume: (value: number) => void;
+  volume: number;
 }
 
-const Player = ({ selectSong, handleAudio, isPlaying, duration, currentTime, handleSeek }: headerProps) => {
+const Player = ({ selectSong, handleAudio, isPlaying, duration, currentTime, handleSeek, handleVolume, volume }: headerProps) => {
   if (!selectSong) return null;
+
+  const volumeIcon = () => {
+    if (volume === 0) return <VolumeX />;
+    if (volume > 0 && volume <= 0.3) return <Volume />;
+    if (volume > 0.3 && volume <= 0.7) return <Volume1 />;
+    return <Volume2 />;
+  };
 
   return (
     <>
@@ -40,8 +49,8 @@ const Player = ({ selectSong, handleAudio, isPlaying, duration, currentTime, han
         </div>
       </div>
       <div className="flex flex-row items-center justify-end px-5 gap-3">
-        <Volume1Icon />
-        <input type="range" className="w-1/3 accent-white" />
+        { volumeIcon() }
+        <input type="range" className="w-1/3 accent-white" min={0} max={1} step={0.01} onChange={(e) => handleVolume(Number(e.target.value))} />
       </div>
     </>
   )

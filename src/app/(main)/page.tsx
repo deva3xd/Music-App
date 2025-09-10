@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { song } from "@/generated/prisma";
 import SongList from "@/components/SongList";
@@ -12,6 +12,7 @@ const Home = () => {
   const [selectSong, setSelectSong] = useState<song | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const [volume, setVolume] = useState(1);
 
   // state progress
   const [currentTime, setCurrentTime] = useState(0);
@@ -87,23 +88,29 @@ const Home = () => {
     }
   };
 
+  const handleVolume = (value: number) => {
+    if (audioRef.current) {
+      audioRef.current.volume = value;
+    }
+    setVolume(value);
+  };
+
   return (
-    <div className="flex flex-row justify-center gap-10 h-screen">
-      <div className="w-1/6">
-        <SidebarProvider>
-          <AppSidebar />
-        </SidebarProvider>
-      </div>
-      <div className="w-5/6 flex flex-col h-full items-center bg-foreground max-w-screen-xl">
-        <div className="text-white m-2 w-full h-5/6 p-6 overflow-y-auto">
-          <SongList songs={songs} songState={{ value: selectSong, set: setSelectSong }} isPlaying={isPlaying} handleClick={handleClick} />
+    <SidebarProvider>
+      <AppSidebar />
+      <main className="w-screen bg-background">
+        <SidebarTrigger className="text-white bg-black fixed top-0" />
+        <div className="max-w-screen-lg mx-auto">
+          <div className="mx-2 text-white py-2 w-full overflow-y-auto bg-foreground min-h-screen">
+            <SongList songs={songs} songState={{ value: selectSong, set: setSelectSong }} isPlaying={isPlaying} handleClick={handleClick} />
+          </div>
+          <div className={`mx-2 text-white fixed bottom-0 w-screen bg-background max-w-screen-lg py-2 ${selectSong ? "grid grid-cols-3" : "hidden"}`}>
+            <Player selectSong={selectSong} handleAudio={handleAudio} isPlaying={isPlaying} duration={duration} currentTime={currentTime} handleSeek={handleSeek} handleVolume={handleVolume} volume={volume} />
+          </div>
         </div>
-        <div className={`text-white mt-2 bg-background w-full h-1/6 ${selectSong ? "grid grid-cols-3" : "hidden"}`}>
-          <Player selectSong={selectSong} handleAudio={handleAudio} isPlaying={isPlaying} duration={duration} currentTime={currentTime} handleSeek={handleSeek} />
-        </div>
-      </div>
+      </main>
       <audio ref={audioRef} src={selectSong?.audio} />
-    </div>
+    </SidebarProvider>
   );
 };
 
